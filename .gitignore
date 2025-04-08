@@ -1,8 +1,9 @@
-# Ignore node_modules and env files
-**/node_modules/
+# Ignore env files and node_modules
 **/.env
-
-# Optional: Ignore build and logs
+**/node_modules/
 **/build/
 **/dist/
-**/logs/
+
+# Any GitHub default entries from remote
+.DS_Store
+.env
