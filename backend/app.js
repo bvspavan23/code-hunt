@@ -13,7 +13,7 @@ mongoose
   .catch((e) => console.log(e));
 
 const corsOptions = {
-    origin: ["http://localhost:5173"],
+    origin: ["https://coding-club-y7lo.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
 }; 
@@ -25,5 +25,5 @@ app.use('/',hintRoutes);
 app.use(errorHandler);
 
 app.listen(PORT,()=>{
-    console.log(`server is running at http://localhost:${PORT}`);
+    console.log(`server is running`);
 })

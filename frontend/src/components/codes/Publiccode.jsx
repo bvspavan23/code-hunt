@@ -5,7 +5,7 @@ import axios from "axios";
 import Card from "../card/card";
 
 const Publiccode = () => {
-  const Base_URL = "http://localhost:5000";
+  const Base_URL = "https://code-hunt-m9vq.onrender.com";
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState("");
