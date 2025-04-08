@@ -13,7 +13,7 @@ mongoose
   .catch((e) => console.log(e));
 
 const corsOptions = {
-    origin: ["https://coding-club-y7lo.onrender.com"],
+    origin: ["https://code-hunt-omega.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
 }; 
