@@ -1,7 +1,27 @@
 import React, { useState } from "react";
 import axios from "axios";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import {
+  LexicalComposer,
+  RichTextPlugin,
+  ContentEditable,
+  HistoryPlugin,
+  OnChangePlugin,
+} from "@lexical/react/LexicalComposer";
+import { $getRoot, $getSelection } from "lexical";
+import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import "./editor.css"; // we'll style it simply
+
+const editorConfig = {
+  namespace: "HintEditor",
+  onError(error) {
+    throw error;
+  },
+  theme: {
+    // Simple theme for editor (you can customize more here)
+    paragraph: "editor-paragraph",
+  },
+  editorState: null,
+};
 
 const HintForm = () => {
   const Base_URL = "https://code-hunt-m9vq.onrender.com";
@@ -30,7 +50,8 @@ const HintForm = () => {
       setHint("");
     } catch (err) {
       setError(
-        err.response?.data?.message || "Something went wrong while creating hint."
+        err.response?.data?.message ||
+          "Something went wrong while creating hint."
       );
     }
   };
@@ -38,7 +59,9 @@ const HintForm = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-3xl">
-        <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">Add a New Hint</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">
+          Add a New Hint
+        </h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
@@ -49,33 +72,24 @@ const HintForm = () => {
             className="border border-gray-300 rounded-lg px-4 py-2 text-lg"
           />
 
-          <ReactQuill
-            value={hint}
-            onChange={setHint}
-            placeholder="Write your hint here..."
-            className="bg-white"
-            theme="snow"
-            modules={{
-              toolbar: [
-                [{ header: [1, 2, false] }],
-                ["bold", "italic", "underline", "strike"],
-                [{ list: "ordered" }, { list: "bullet" }],
-                ["link", "image"],
-                ["clean"],
-              ],
-            }}
-            formats={[
-              "header",
-              "bold",
-              "italic",
-              "underline",
-              "strike",
-              "list",
-              "bullet",
-              "link",
-              "image",
-            ]}
-          />
+          <LexicalComposer initialConfig={editorConfig}>
+            <div className="border border-gray-300 rounded-lg p-2 min-h-[150px] bg-white">
+              <RichTextPlugin
+                contentEditable={<ContentEditable className="editor-input" />}
+                placeholder={<div className="text-gray-400">Write your hint here...</div>}
+                ErrorBoundary={LexicalErrorBoundary}
+              />
+              <HistoryPlugin />
+              <OnChangePlugin
+                onChange={(editorState) => {
+                  editorState.read(() => {
+                    const htmlString = $getRoot().getTextContent();
+                    setHint(htmlString);
+                  });
+                }}
+              />
+            </div>
+          </LexicalComposer>
 
           <button
             type="submit"
